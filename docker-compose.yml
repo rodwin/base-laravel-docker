@@ -1,0 +1,35 @@
+version: '2'
+
+services:
+
+  web:
+    image: million12/nginx-php:php70
+    volumes_from:
+      - volumes_source
+    ports:
+      - "8080:80"
+
+  mysql:
+    image: mysql:latest
+    volumes_from:
+      - volumes_data
+    ports:
+      - "33066:3306"
+    environment:
+      MYSQL_DATABASE: homestead
+      MYSQL_USER: homestead
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: root
+
+  volumes_source:
+    image: tianon/true
+    volumes:
+      - ./src/:/data/www
+      - ./data/logs/:/data/logs
+      - ./data/tmp/php/:/data/tmp/php
+      - ./conf/nginx/:/data/conf/nginx
+
+  volumes_data:
+    image: tianon/true
+    volumes:
+      - ./data/mysql:/var/lib/mysql
